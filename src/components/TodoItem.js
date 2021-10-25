@@ -9,6 +9,12 @@ function TodoItem(props) {
         onChange={() => props.handleChangeProps(props.todo.id)}
         checked={props.todo.completed}
       /> 
+        <button 
+          onClick={() => props.deleteTodoProps(props.todo.id)}
+        >
+          Delete
+        </button>
+  
         {props.todo.title}
     </li>
   )

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import TodosList from "./TodosList";
-import Header from "./Header"
+import Header from "./Header";
+import InputTodo from "./InputTodo";
+import { v4 as uuidv4 } from "uuid";
 
 
 class TodoContainer extends Component {
@@ -9,7 +11,7 @@ class TodoContainer extends Component {
     this.state = {
       todos: [
         {
-          id: 1,
+          id: uuidv4(),
           title: "Setup development environment",
           completed: true
         },
@@ -25,11 +27,9 @@ class TodoContainer extends Component {
         }
       ]
     }
-
-    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(id) {
+  handleChange = id => {
     this.setState(prevState => ({
       todos: prevState.todos.map(todo => {
         if (todo.id === id) {
@@ -43,11 +43,37 @@ class TodoContainer extends Component {
     }));
   }
 
+  delTodo = id => {
+    this.setState({
+      todos: [
+        ...this.state.todos.filter(todo => {
+          return todo.id !== id;
+        })
+      ]
+    });
+  }
+
+  addTodoItem = title => {
+    const newTodo = {
+      id: this.state.todos.length + 1,
+      title: title,
+      completed: false
+    };
+    this.setState({
+      todos: [...this.state.todos, newTodo]
+    });
+  }
+
   render() {
     return (
       <div>
         <Header />
-        <TodosList todos={this.state.todos} handleChangeProps={this.handleChange}/>
+        <InputTodo addTodoProps={this.addTodoItem}/>
+        <TodosList 
+          todos={this.state.todos}
+          handleChangeProps={this.handleChange}
+          deleteTodoProps={this.delTodo}
+        />
       </div>
     )
   }
